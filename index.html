@@ -1,0 +1,148 @@
+<style>
+    section {
+        margin-bottom: 50px;
+    }
+
+    .colored-div {
+        width: 100px;
+        height: 100px;
+        background: black;
+    }
+
+    .date {
+        font-size: 12px;
+    }
+
+    .progress-bar {
+        background: grey;
+        width: 200px;
+        height: 20px;
+        position: relative;
+    }
+
+    .progress {
+        width: 1%;
+        height: 20px;
+        background: blue;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 9;
+    }
+
+    .disabled {
+        pointer-events: none;
+        opacity: .5;
+    }
+
+    .percentage {
+        position: relative;
+        z-index: 99;
+        display: block;
+        text-align: center;
+        color: white;
+    }
+</style>
+<script src="https://npmcdn.com/vue/dist/vue.js"></script>
+
+<section id="ex-1">
+    <!-- 1) - Générer une valeur entre 0 et 50 (Math.floor(Math.random()) * 50)
+    - Créer un système permettant de trouver le nombre générer à partir de ces 4 boutons
+    - Afficher une réponse à chaque clique (Plus grand / Plus petit)
+    - Une fois le nombre trouver, afficher "Gagné !" et proposer de recommencer
+    - Afficher un tableau de scores qui reprend le nombre de tentatives de chaque partie
+  -->
+
+    <div>
+        <p>Valeur actuelle: {{ currentValue }}</p>
+        <p>{{hintDifferenceValue}}</p>
+        <p>Tentatives : {{attempts}}</p>
+        <template v-if="!hasWon">
+            <button v-on:click="currentValue += 5">+ 5</button>
+            <button v-on:click="(currentValue > 0) ? currentValue -= 5 : false">- 5</button>
+            <button v-on:click="currentValue++">+ 1</button>
+            <button v-on:click="currentValue--">- 1</button>
+        </template>
+        <!--<p>{{ result }}</p>-->
+        <button type="button" v-else @click="restart">Recommencer</button>
+        <div>
+            <p>Resultats</p>
+            <div v-for="(result,index) in hallOfFame">
+                <p><strong>Partie numero : {{index+1}}</strong></p>
+                <p>Valeur a trouver : {{result.valueToFind}}</p>
+                <p>Nombre de tentatives : {{result.attempts}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="ex-2">
+    <h2>Barre de progression</h2>
+    <!-- 2) Créer une barre de progression (les styles sont déjà définis dans la class .progress)
+                - Permettre de mettre en pause la barre et changer le texte (Démarrer - Stop)
+                - Bonus : Permettre de redémarrer la barre de progression une fois arrivé à 100%
+            -->
+    <div>
+        <div class="progress-bar">
+            <div class="percentage"><strong>{{currentProgress}}</strong>%</div>
+            <div class="progress" :style="currentWidth"></div>
+        </div>
+        <button @click="toggleBar">{{buttonValue}}</button>
+    </div>
+</section>
+
+<section id="ex-3">
+    <!-- 3) Au clique du bouton, activer une animation qui va changer la class de la div selon les couleurs entrées dans les 2 inputs et ce, toutes les 2 secondes -->
+    <div class="colored-div" :style="styleDiv"></div>
+    <button @click="toggleEffect">{{inProgress ? "Arreter" : "Demarrer"}} l'effet</button>
+    <div>
+        <p>Première couleur</p>
+        <input type="text" v-model="color1">
+    </div>
+    <div>
+        <p>Deuxième couleur</p>
+        <input type="text" v-model="color2">
+    </div>
+</section>
+
+<section id="ex-4">
+
+    <!-- 4)
+        - Afficher une liste de tâches à faire  (s'il n'y a pas de tâche, afficher "Pas de tâche")
+        - Permettre l'ajout d'une nouvelle tâche via l'input à condution que cette dernière
+        comporte au moins 2 caractères (class .disabled)
+        - Afficher, pour chaque nouvelle tâche, la date à laquelle elle a été ajoutée
+            let date = new Date();
+            date.getDate() + "/" + date.getMonth() +"/"+ date.getFullYear());
+        - Permettre la suppression à partir d'un "<button>X</button>"
+        de créer une listes de tâches, d'en ajouter et d'en supprimer -->
+    <div class="to-do">
+        <p v-if="listTaches.length === 0">Pas de tâche :D </p>
+        <ul v-else v-for="(tache, index) in listTaches">
+            <li>{{tache.nom}} - <span class="date">{{tache.dayTime}}</span>
+                <button @click="deleteTache(index)">{{index}}</button>
+            </li>
+        </ul>
+    </div>
+    <form>
+        <input v-model="newTache" type="text">
+        <button :class="styleButton" @click="ajoutTache($event)">Ajouter la tâche</button>
+    </form>
+    </div>
+</section>
+
+<script type="text/javascript" src="app.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
